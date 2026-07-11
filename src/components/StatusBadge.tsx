@@ -7,11 +7,11 @@ type StatusBadgeProps = {
 
 const TONE_CLASSES: Record<StatusBadgeTone, string> = {
   success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  warning: 'bg-amber-50 text-amber-700 border-amber-200',
+  warning: 'bg-[#fff8cc] text-[#8d6f00] border-[#e2c72f]',
   neutral: 'bg-neutral-100 text-neutral-500 border-neutral-200',
   danger: 'bg-rose-50 text-rose-600 border-rose-200',
-  info: 'bg-blue-50 text-blue-700 border-blue-200',
-  dark: 'bg-neutral-900 text-white border-neutral-900',
+  info: 'bg-[#e8fbfd] text-[#08798b] border-[#46d6e7]',
+  dark: 'bg-[#17191f] text-white border-[#17191f]',
 }
 
 /**

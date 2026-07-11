@@ -43,7 +43,7 @@ export function AnsweringChallengerPage() {
           rows={2}
           onChange={(event) => setAnswer(event.target.value.replace(/[\r\n]/g, ''))}
           placeholder="ここに入力…"
-          className="w-full resize-none rounded-xl border border-neutral-300 bg-white px-4 py-3 text-base text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-neutral-900 disabled:opacity-70"
+          className="w-full resize-none rounded-[13px] border-2 border-[#c7c2b8] bg-white px-4 py-3 text-base text-[#17191f] outline-none transition placeholder:text-neutral-400 focus:border-[#17191f] focus:shadow-[0_0_0_4px_rgba(244,209,63,0.18)] disabled:opacity-70"
         />
         <div className="mt-1 flex items-center justify-between text-xs text-neutral-400">
           <span>1行で簡潔に</span>
@@ -56,7 +56,7 @@ export function AnsweringChallengerPage() {
         )}
       </div>
 
-      <Card className="border-amber-200 bg-amber-50 text-sm font-bold text-amber-800">
+      <Card className="border-[#d4b91e] bg-[#fff8cc] text-sm font-black text-[#6f5900]">
         💡 AIに負けるな！ユニークな回答を入力しよう
       </Card>
 

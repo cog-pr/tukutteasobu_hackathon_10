@@ -6,13 +6,11 @@ import { Link } from 'react-router-dom'
  */
 export function DevNavLink() {
   return (
-    <div className="mb-2 flex justify-end">
-      <Link
-        to="/screens"
-        className="rounded-full border border-neutral-300 bg-white px-2 py-1 text-[10px] text-neutral-400 transition hover:border-neutral-400 hover:text-neutral-600"
-      >
-        画面一覧（開発用）
-      </Link>
-    </div>
+    <Link
+      to="/screens"
+      className="shrink-0 rounded-full border border-white/15 px-2 py-1 text-[9px] font-bold text-white/50 transition hover:border-white/30 hover:text-white"
+    >
+      画面一覧
+    </Link>
   )
 }

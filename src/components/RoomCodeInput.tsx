@@ -47,7 +47,7 @@ export function RoomCodeInput({ value, onChange, length = 6 }: RoomCodeInputProp
           onKeyDown={(event) => handleKeyDown(index, event)}
           inputMode="text"
           maxLength={1}
-          className="h-11 w-9 rounded-lg border border-neutral-300 bg-white text-center text-xl font-black uppercase text-neutral-900 outline-none focus:border-neutral-900"
+          className="h-12 w-10 rounded-[10px] border-2 border-[#c7c2b8] bg-white text-center text-xl font-black uppercase text-[#17191f] outline-none transition focus:border-[#17191f] focus:shadow-[0_0_0_4px_rgba(244,209,63,0.18)]"
         />
       ))}
     </div>

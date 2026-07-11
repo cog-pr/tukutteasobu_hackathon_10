@@ -8,7 +8,7 @@ type CountdownBadgeProps = {
  */
 export function CountdownBadge({ remainingSeconds }: CountdownBadgeProps) {
   return (
-    <span className="inline-flex items-center gap-1 rounded-lg bg-neutral-900 px-3 py-1.5 text-sm font-bold text-white">
+    <span className="inline-flex items-center gap-1 rounded-xl border border-white/10 bg-[#17191f] px-3 py-1.5 text-sm font-black text-white shadow-[0_3px_0_#aaa59b]">
       <span aria-hidden>⏱</span>
       {remainingSeconds}秒
     </span>

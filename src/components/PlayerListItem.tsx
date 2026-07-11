@@ -9,10 +9,10 @@ type PlayerListItemProps = {
 
 export function PlayerListItem({ player, isSelf = false }: PlayerListItemProps) {
   return (
-    <li className="flex items-center justify-between rounded-xl border border-neutral-200 bg-white px-3 py-2.5">
+    <li className="flex items-center justify-between rounded-[13px] border border-[#e2ddd4] bg-white px-3 py-2.5 shadow-[0_2px_0_rgba(37,36,32,0.05)]">
       <div className="flex items-center gap-2">
         <Avatar name={player.name} />
-        <span className="font-bold text-neutral-900">{player.name}</span>
+        <span className="font-black text-[#17191f]">{player.name}</span>
         {isSelf && <span className="text-xs text-neutral-400">（あなた）</span>}
         {player.isHost && <StatusBadge tone="dark">ホスト</StatusBadge>}
       </div>
