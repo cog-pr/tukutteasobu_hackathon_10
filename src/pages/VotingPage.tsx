@@ -55,7 +55,7 @@ export function VotingPage() {
       </div>
 
       {votedFor && (
-        <div className="rounded-xl bg-blue-50 px-3 py-2 text-center text-sm font-bold text-blue-700">
+        <div className="rounded-xl border border-[#46d6e7] bg-[#e8fbfd] px-3 py-2 text-center text-sm font-black text-[#08798b]">
           ✓ 投票済み — 他の人の投票を待っています
         </div>
       )}

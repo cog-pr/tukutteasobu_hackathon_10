@@ -26,22 +26,22 @@ export function AnsweringWaitingPage() {
         <p className="mt-1 text-lg font-bold leading-snug text-neutral-900">「{DUMMY_PROMPT}」</p>
       </Card>
 
-      <Card className="border-amber-200 bg-amber-50">
-        <p className="text-sm font-bold text-amber-800">
+      <Card className="border-[#e5484d] bg-[#fff0f1]">
+        <p className="text-sm font-black text-[#a62f35]">
           🎤 挑戦中
           <br />
           {DUMMY_CHALLENGER_NAME}が人類の意地を見せています……
         </p>
       </Card>
 
-      <Card className="border-blue-200 bg-blue-50">
-        <p className="text-sm font-bold text-blue-800">🤖 生成中</p>
-        <p className="mt-1 flex items-center gap-1 text-sm text-blue-700">
+      <Card className="border-[#46d6e7] bg-[#e8fbfd]">
+        <p className="text-sm font-black text-[#08798b]">🤖 生成中</p>
+        <p className="mt-1 flex items-center gap-1 text-sm text-[#08798b]">
           AIも回答を生成しています
           <span className="inline-flex gap-0.5">
-            <span className="h-1 w-1 animate-bounce rounded-full bg-blue-500" />
-            <span className="h-1 w-1 animate-bounce rounded-full bg-blue-500 [animation-delay:0.15s]" />
-            <span className="h-1 w-1 animate-bounce rounded-full bg-blue-500 [animation-delay:0.3s]" />
+            <span className="h-1 w-1 animate-bounce rounded-full bg-[#46d6e7]" />
+            <span className="h-1 w-1 animate-bounce rounded-full bg-[#46d6e7] [animation-delay:0.15s]" />
+            <span className="h-1 w-1 animate-bounce rounded-full bg-[#46d6e7] [animation-delay:0.3s]" />
           </span>
         </p>
       </Card>

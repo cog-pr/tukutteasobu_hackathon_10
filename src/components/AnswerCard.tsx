@@ -27,12 +27,12 @@ export function AnswerCard({
   const isRevealAi = revealTag === 'ai'
 
   const borderClass = isRevealHuman
-    ? 'border-amber-300 bg-amber-50'
+    ? 'border-[#a62f35] bg-[#fff0f1] shadow-[0_5px_0_rgba(166,47,53,0.2)]'
     : isRevealAi
-      ? 'border-blue-300 bg-blue-50'
+      ? 'border-[#08798b] bg-[#e8fbfd] shadow-[0_5px_0_rgba(8,121,139,0.2)]'
       : selected
-        ? 'border-neutral-900'
-        : 'border-neutral-200 bg-white'
+        ? 'border-[#17191f] bg-[#fff8cc] shadow-[0_5px_0_#17191f]'
+        : 'border-[#d8d3c9] bg-[#fffdf8] shadow-[0_5px_0_rgba(37,36,32,0.07)]'
 
   const Wrapper = onClick && !disabled ? 'button' : 'div'
 
@@ -41,29 +41,29 @@ export function AnswerCard({
       type={Wrapper === 'button' ? 'button' : undefined}
       onClick={onClick && !disabled ? onClick : undefined}
       disabled={Wrapper === 'button' ? disabled : undefined}
-      className={`w-full rounded-2xl border p-4 text-left shadow-sm transition ${borderClass} ${
+      className={`w-full rounded-[18px] border-2 p-4 text-left transition ${borderClass} ${
         onClick && !disabled ? 'active:scale-[0.98]' : ''
       } ${disabled && !revealTag && !selected ? 'opacity-60' : ''}`}
     >
       <div className="mb-2 flex items-center justify-between">
-        <span className="text-xs font-bold tracking-wide text-neutral-500">
+        <span className="text-[11px] font-black tracking-[0.12em] text-[#686d78]">
           回答{label}
           {revealTag && (isRevealHuman ? ' - 人類 👤' : ' - AI 🤖')}
         </span>
         <div className="flex items-center gap-1.5">
           {selected && !revealTag && (
-            <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[11px] font-bold text-blue-700">
+            <span className="rounded-full border border-[#08798b] bg-[#46d6e7] px-2 py-0.5 text-[10px] font-black text-[#17191f]">
               投票済み
             </span>
           )}
           {typeof voteCount === 'number' && (
-            <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-[11px] font-bold text-neutral-600">
+            <span className="rounded-full bg-[#17191f] px-2 py-0.5 text-[10px] font-black text-white">
               {voteCount}票
             </span>
           )}
         </div>
       </div>
-      <p className="text-base font-bold leading-snug text-neutral-900">{text}</p>
+      <p className="text-base font-black leading-snug text-[#17191f]">{text}</p>
       {attributionName && <p className="mt-1 text-xs text-neutral-400">by {attributionName}</p>}
     </Wrapper>
   )

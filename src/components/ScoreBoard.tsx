@@ -7,17 +7,17 @@ type ScoreBoardProps = {
 
 export function ScoreBoard({ score, winningScore = 3 }: ScoreBoardProps) {
   return (
-    <div className="flex items-center justify-center gap-3 rounded-2xl border border-neutral-200 bg-white px-4 py-3 shadow-sm">
+    <div className="flex items-center justify-center gap-3 rounded-[17px] border border-white/10 bg-[#171a22] px-4 py-3 text-white shadow-[0_5px_0_rgba(0,0,0,0.18)]">
       <div className="text-center">
-        <p className="text-[11px] font-bold tracking-widest text-amber-500">人類</p>
-        <p className="text-3xl font-black text-amber-500">{score.human}</p>
+        <p className="text-[9px] font-black tracking-[0.14em] text-[#ff6b70]">HUMAN</p>
+        <p className="text-3xl font-black text-white">{score.human}</p>
       </div>
-      <p className="text-xl font-bold text-neutral-300">─</p>
+      <p className="text-[9px] font-black text-white/30">VS</p>
       <div className="text-center">
-        <p className="text-3xl font-black text-blue-500">{score.ai}</p>
-        <p className="text-[11px] font-bold tracking-widest text-blue-500">AI</p>
+        <p className="text-3xl font-black text-white">{score.ai}</p>
+        <p className="text-[9px] font-black tracking-[0.14em] text-[#46d6e7]">AI</p>
       </div>
-      <p className="ml-2 text-[11px] text-neutral-400">{winningScore}点先取</p>
+      <p className="ml-2 text-[9px] font-bold text-white/40">{winningScore}点先取</p>
     </div>
   )
 }

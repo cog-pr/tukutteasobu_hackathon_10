@@ -1,2 +1,75 @@
 @import "tailwindcss";
 
+:root {
+  color: #17191f;
+  background: #0c0e13;
+  font-family:
+    Inter, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, system-ui,
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --app-ink: #17191f;
+  --app-muted: #686d78;
+  --app-paper: #f5f1e8;
+  --app-panel: #fffdf8;
+  --app-line: #d8d3c9;
+  --app-accent: #f4d13f;
+  --app-human: #e5484d;
+  --app-human-deep: #a62f35;
+  --app-ai: #46d6e7;
+  --app-ai-deep: #08798b;
+  --app-danger: #ff5d55;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: #0c0e13;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  overscroll-behavior-y: none;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgb(70 214 231 / 55%);
+  outline-offset: 2px;
+}
+
+::selection {
+  color: var(--app-ink);
+  background: var(--app-accent);
+}
+
+.yellow-marker {
+  display: inline;
+  padding-inline: 0.08em;
+  background-image: linear-gradient(
+    transparent 48%,
+    rgb(244 209 63 / 70%) 48%,
+    rgb(244 209 63 / 70%) 92%,
+    transparent 92%
+  );
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}

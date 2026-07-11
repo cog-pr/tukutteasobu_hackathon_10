@@ -10,9 +10,9 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   primary:
-    'bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-700 disabled:bg-neutral-200 disabled:text-neutral-400',
+    'border-2 border-[#17191f] bg-[#f4d13f] text-[#17191f] shadow-[0_5px_0_#8e7511] hover:brightness-105 active:translate-y-[2px] active:shadow-none disabled:border-[#aaa69d] disabled:bg-[#d8d3c9] disabled:text-[#77736b] disabled:shadow-none',
   secondary:
-    'border-2 border-neutral-900 bg-white text-neutral-900 hover:bg-neutral-100 active:bg-neutral-200 disabled:border-neutral-200 disabled:text-neutral-400',
+    'border-2 border-[#17191f] bg-[#fffdf8] text-[#17191f] shadow-[0_5px_0_#aba69c] hover:bg-white active:translate-y-[2px] active:shadow-none disabled:border-[#d8d3c9] disabled:text-[#88837a] disabled:shadow-none',
 }
 
 /**
@@ -28,7 +28,7 @@ export function Button({
 }: ButtonProps) {
   return (
     <button
-      className={`min-h-12 rounded-xl px-5 text-base font-bold tracking-wide transition disabled:cursor-not-allowed ${
+      className={`min-h-[54px] rounded-[15px] px-5 text-[15px] font-black tracking-[0.03em] transition duration-150 disabled:cursor-not-allowed ${
         fullWidth ? 'w-full' : ''
       } ${VARIANT_CLASSES[variant]} ${className}`}
       disabled={disabled}

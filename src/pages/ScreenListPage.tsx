@@ -18,7 +18,7 @@ export function ScreenListPage() {
             <li key={route.path}>
               <Link
                 to={route.path}
-                className="block rounded-xl border border-neutral-200 bg-white px-4 py-3 shadow-sm transition hover:border-neutral-400"
+                className="block rounded-[13px] border border-[#d8d3c9] bg-[#fffdf8] px-4 py-3 shadow-[0_4px_0_rgba(37,36,32,0.07)] transition hover:-translate-y-0.5 hover:border-[#17191f]"
               >
                 <p className="font-bold text-neutral-900">{route.label}</p>
                 <p className="text-xs text-neutral-400">{route.description}</p>

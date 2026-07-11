@@ -21,13 +21,13 @@ export function RoomCodeBadge({ roomCode }: RoomCodeBadgeProps) {
   }
 
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
+    <div className="rounded-[17px] border-2 border-[#17191f] bg-[#f4d13f] p-4 shadow-[0_5px_0_#17191f]">
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-xs font-bold text-neutral-500">ルームコード</span>
+        <span className="text-[9px] font-black tracking-[0.14em] text-[#17191f]">ROOM CODE</span>
         <button
           type="button"
           onClick={handleCopy}
-          className="rounded-lg border border-neutral-300 px-3 py-1 text-xs font-bold text-neutral-700 transition hover:bg-neutral-100"
+          className="rounded-lg border border-[#17191f] bg-white/50 px-3 py-1 text-xs font-black text-[#17191f] transition hover:bg-white/80"
         >
           {copied ? 'コピーしました' : 'コピー'}
         </button>
@@ -36,7 +36,7 @@ export function RoomCodeBadge({ roomCode }: RoomCodeBadgeProps) {
         {roomCode.split('').map((char, index) => (
           <span
             key={index}
-            className="grid h-11 w-9 place-items-center rounded-lg border border-neutral-300 bg-neutral-50 text-xl font-black text-neutral-900"
+            className="grid h-11 w-9 place-items-center rounded-lg border border-[#17191f] bg-white/65 text-xl font-black text-[#17191f]"
           >
             {char}
           </span>

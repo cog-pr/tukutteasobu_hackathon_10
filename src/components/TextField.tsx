@@ -20,14 +20,14 @@ export function TextField({
 
   return (
     <label className="block">
-      <span className="mb-1 block text-sm font-bold text-neutral-700">{label}</span>
+      <span className="mb-2 block text-sm font-black text-[#17191f]">{label}</span>
       <input
         value={value}
         maxLength={maxLength * 2}
-        className={`min-h-12 w-full rounded-xl border bg-white px-4 text-base text-neutral-900 outline-none placeholder:text-neutral-400 ${
+        className={`min-h-[54px] w-full rounded-[13px] border-2 bg-white px-4 text-base text-[#17191f] outline-none transition placeholder:text-neutral-400 focus:shadow-[0_0_0_4px_rgba(244,209,63,0.18)] ${
           errorMessage
             ? 'border-rose-400 focus:border-rose-500'
-            : 'border-neutral-300 focus:border-neutral-900'
+            : 'border-[#c7c2b8] focus:border-[#17191f]'
         } ${className}`}
         {...rest}
       />

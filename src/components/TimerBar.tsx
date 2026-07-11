@@ -12,9 +12,9 @@ export function TimerBar({ remainingSeconds, totalSeconds }: TimerBarProps) {
   const isUrgent = ratio < 0.25
 
   return (
-    <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-200">
+    <div className="h-2.5 w-full overflow-hidden rounded-full border border-[#cbc6bc] bg-[#e4dfd5]">
       <div
-        className={`h-full rounded-full transition-all ${isUrgent ? 'bg-rose-500' : 'bg-amber-400'}`}
+        className={`h-full rounded-full transition-all ${isUrgent ? 'bg-[#ff5d55]' : 'bg-[#f4d13f]'}`}
         style={{ width: `${ratio * 100}%` }}
       />
     </div>

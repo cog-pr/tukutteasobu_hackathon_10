@@ -31,12 +31,12 @@ export function FinalResultPage() {
         </div>
       </div>
 
-      <Card className={humanWon ? 'border-amber-200 bg-amber-50' : 'border-blue-200 bg-blue-50'}>
+      <Card className={humanWon ? 'border-[#e5484d] bg-[#fff0f1]' : 'border-[#46d6e7] bg-[#e8fbfd]'}>
         <p className="text-center text-xs font-bold text-neutral-500">勝者</p>
-        <p className={`mt-1 text-center text-xl font-black ${humanWon ? 'text-amber-600' : 'text-blue-600'}`}>
-          {humanWon ? '人類の勝利！🎉' : 'AIの勝利'}
+        <p className={`mt-1 text-center text-xl font-black ${humanWon ? 'text-[#a62f35]' : 'text-[#08798b]'}`}>
+          {humanWon ? '人類の勝利！' : 'AIの勝利'}
         </p>
-        <p className="mt-2 text-center text-sm font-bold text-neutral-500">「知能で負けても、肉体で勝て。」</p>
+        <p className="mt-2 text-center text-sm font-bold text-neutral-500">「頭で負けたら、肉体で勝てばええねん。」</p>
       </Card>
 
       <div>

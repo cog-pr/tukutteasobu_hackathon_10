@@ -11,11 +11,14 @@ export function RoundIntroPage() {
       <ScoreBoard score={DUMMY_SCORE} />
 
       <div>
-        <span className="rounded-full bg-neutral-900 px-3 py-1 text-xs font-bold text-white">
+        <span className="rounded-full bg-[#17191f] px-3 py-1 text-[10px] font-black tracking-[0.15em] text-white">
           ROUND {DUMMY_ROUND_NUMBER}
         </span>
         <p className="mt-6 text-base text-neutral-500">今回の挑戦者は……</p>
-        <p className="mt-2 text-4xl font-black text-amber-500">{DUMMY_CHALLENGER_NAME}</p>
+        <div className="mx-auto mt-5 grid h-28 w-28 -rotate-3 place-items-center rounded-full border-[3px] border-[#17191f] bg-[#f4d13f] shadow-[9px_8px_0_#17191f]">
+          <span className="text-4xl font-black text-[#17191f]">{Array.from(DUMMY_CHALLENGER_NAME)[0]}</span>
+        </div>
+        <p className="mt-5 text-4xl font-black tracking-tight text-[#17191f]">{DUMMY_CHALLENGER_NAME}</p>
         <p className="text-sm text-neutral-500">さん！</p>
         <div className="mx-auto mt-6 h-px w-24 bg-neutral-200" />
         <div className="mt-4 flex flex-col items-center gap-2">
