@@ -6,10 +6,12 @@ import { PhoneScreen } from '../components/PhoneScreen'
 import { RoomCodeBadge } from '../components/RoomCodeBadge'
 import { TextField } from '../components/TextField'
 import { DUMMY_ROOM_CODE } from '../data/dummyData'
+import { useLocalGame } from '../client/hooks/useLocalGame'
 
 const MAX_NAME_LENGTH = 10
 
 export function CreateRoomPage() {
+  const { actions } = useLocalGame()
   const [playerName, setPlayerName] = useState('')
   const [created, setCreated] = useState(false)
 
@@ -80,7 +82,7 @@ export function CreateRoomPage() {
       </div>
 
       <div className="mt-auto flex flex-col gap-3">
-        <Button variant="primary" disabled={!isNameValid} onClick={() => setCreated(true)}>
+        <Button variant="primary" disabled={!isNameValid} onClick={() => { actions.createPlayers(playerName); setCreated(true) }}>
           ルームを作成する
         </Button>
       </div>

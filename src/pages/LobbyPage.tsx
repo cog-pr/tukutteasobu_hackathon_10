@@ -7,18 +7,21 @@ import { PlayerListItem } from '../components/PlayerListItem'
 import { RoomCodeBadge } from '../components/RoomCodeBadge'
 import { SegmentedControl } from '../components/SegmentedControl'
 import { StatusBadge } from '../components/StatusBadge'
-import { DUMMY_MAX_PLAYERS, DUMMY_PLAYERS, DUMMY_ROOM_CODE } from '../data/dummyData'
+import { DUMMY_ROOM_CODE } from '../data/dummyData'
+import { useLocalGame } from '../client/hooks/useLocalGame'
 
 const MIN_PLAYERS = 4
 const SELF_PLAYER_ID = 'player_1'
 
 export function LobbyPage() {
   const navigate = useNavigate()
+  const { state, actions } = useLocalGame()
   const [isSelfReady, setIsSelfReady] = useState(true)
 
-  const players = DUMMY_PLAYERS
+  const players = state.players
+  const maxPlayers = 4
   const onlineCount = players.filter((player) => player.isOnline).length
-  const emptySlotCount = Math.max(0, DUMMY_MAX_PLAYERS - players.length)
+  const emptySlotCount = Math.max(0, maxPlayers - players.length)
   const allReady = players.every((player) => player.id === SELF_PLAYER_ID || !player.isOnline || player.isReady)
   const canStart = onlineCount >= MIN_PLAYERS && allReady && isSelfReady
 
@@ -36,7 +39,7 @@ export function LobbyPage() {
           <h2 className="text-sm font-bold text-neutral-700">参加者</h2>
           <span className="text-xs font-bold text-neutral-400">
             {'●'.repeat(players.length)}
-            {'○'.repeat(emptySlotCount)} {players.length}/{DUMMY_MAX_PLAYERS}人
+            {'○'.repeat(emptySlotCount)} {players.length}/{maxPlayers}人
           </span>
         </div>
         <ul className="flex flex-col gap-2">
@@ -67,7 +70,7 @@ export function LobbyPage() {
       </Card>
 
       <div className="mt-auto flex flex-col gap-3">
-        <Button variant="primary" disabled={!canStart} onClick={() => navigate('/round-intro')}>
+        <Button variant="primary" disabled={!canStart} onClick={async () => { await actions.startRound(); navigate('/round-intro') }}>
           ゲームを開始する（ホストのみ）
         </Button>
         <p className="text-center text-xs text-neutral-400">※4人以上・全員準備OKで開始できます</p>
