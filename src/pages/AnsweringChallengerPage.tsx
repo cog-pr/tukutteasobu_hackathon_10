@@ -56,7 +56,7 @@ export function AnsweringChallengerPage() {
         )}
       </div>
 
-      <Card className="border-[#d4b91e] bg-[#fff8cc] text-sm font-black text-[#6f5900]">
+      <Card className="border-[#e5484d] bg-[#fff0f1] text-sm font-black text-[#a62f35]">
         💡 AIに負けるな！ユニークな回答を入力しよう
       </Card>
 

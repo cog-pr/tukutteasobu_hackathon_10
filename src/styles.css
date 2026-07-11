@@ -13,8 +13,9 @@
   --app-paper: #f5f1e8;
   --app-panel: #fffdf8;
   --app-line: #d8d3c9;
-  --app-human: #f4d13f;
-  --app-human-deep: #8d6f00;
+  --app-accent: #f4d13f;
+  --app-human: #e5484d;
+  --app-human-deep: #a62f35;
   --app-ai: #46d6e7;
   --app-ai-deep: #08798b;
   --app-danger: #ff5d55;
@@ -57,5 +58,18 @@ a:focus-visible {
 
 ::selection {
   color: var(--app-ink);
-  background: var(--app-human);
+  background: var(--app-accent);
+}
+
+.yellow-marker {
+  display: inline;
+  padding-inline: 0.08em;
+  background-image: linear-gradient(
+    transparent 48%,
+    rgb(244 209 63 / 70%) 48%,
+    rgb(244 209 63 / 70%) 92%,
+    transparent 92%
+  );
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }

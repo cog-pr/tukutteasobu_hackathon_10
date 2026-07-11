@@ -68,14 +68,14 @@ export function RevealPage() {
       </div>
 
       {showWinner && (
-        <Card className={winnerSide === 'human' ? 'border-[#d4b91e] bg-[#fff8cc]' : 'border-[#46d6e7] bg-[#e8fbfd]'}>
+        <Card className={winnerSide === 'human' ? 'border-[#e5484d] bg-[#fff0f1]' : 'border-[#46d6e7] bg-[#e8fbfd]'}>
           <p className="text-center text-xs font-bold text-neutral-500">このラウンドの勝者</p>
           <p
             className={`mt-1 text-center text-2xl font-black ${
-              winnerSide === 'human' ? 'text-[#8d6f00]' : 'text-[#08798b]'
+              winnerSide === 'human' ? 'text-[#a62f35]' : 'text-[#08798b]'
             }`}
           >
-            {winnerSide === 'human' ? '人類！🎉' : 'AI！'}
+            {winnerSide === 'human' ? '人類！' : 'AI！'}
           </p>
           <p className="mt-2 text-center text-sm font-bold text-neutral-500">
             人類{scoreAfter.human}-{scoreAfter.ai}AI

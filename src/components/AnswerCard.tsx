@@ -27,7 +27,7 @@ export function AnswerCard({
   const isRevealAi = revealTag === 'ai'
 
   const borderClass = isRevealHuman
-    ? 'border-[#8d6f00] bg-[#fff8cc] shadow-[0_5px_0_rgba(141,111,0,0.22)]'
+    ? 'border-[#a62f35] bg-[#fff0f1] shadow-[0_5px_0_rgba(166,47,53,0.2)]'
     : isRevealAi
       ? 'border-[#08798b] bg-[#e8fbfd] shadow-[0_5px_0_rgba(8,121,139,0.2)]'
       : selected

@@ -26,8 +26,8 @@ export function AnsweringWaitingPage() {
         <p className="mt-1 text-lg font-bold leading-snug text-neutral-900">「{DUMMY_PROMPT}」</p>
       </Card>
 
-      <Card className="border-[#d4b91e] bg-[#fff8cc]">
-        <p className="text-sm font-black text-[#6f5900]">
+      <Card className="border-[#e5484d] bg-[#fff0f1]">
+        <p className="text-sm font-black text-[#a62f35]">
           🎤 挑戦中
           <br />
           {DUMMY_CHALLENGER_NAME}が人類の意地を見せています……

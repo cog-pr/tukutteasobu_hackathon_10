@@ -66,16 +66,15 @@ export function RevengePage() {
               onPointerDown={() => setTapCount((prev) => Math.min(REQUIRED_TAPS, prev + 1))}
               className="grid h-40 w-40 place-items-center rounded-full border-[3px] border-[#17191f] bg-[#f4d13f] text-xl font-black text-[#17191f] shadow-[9px_8px_0_#17191f] transition active:translate-y-1 active:scale-95 active:shadow-none"
             >
-              👊
-              <br />
-              タップ！
+              <span>連打</span>
+              <small className="text-xs tracking-[0.16em]">TAP!</small>
             </button>
           </div>
         </>
       ) : (
         <Card className="text-center">
           <p className="text-sm text-neutral-700">
-            <span className="font-black text-[#8d6f00]">{DUMMY_CHALLENGER_NAME}</span>
+            <span className="font-black text-[#a62f35]">{DUMMY_CHALLENGER_NAME}</span>
             が超連打チャレンジに挑戦中！
           </p>
           <div className="mt-3">

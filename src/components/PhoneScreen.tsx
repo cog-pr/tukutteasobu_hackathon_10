@@ -18,11 +18,10 @@ export function PhoneScreen({ children, className = '', bare = false }: PhoneScr
         {!bare && (
           <header className="flex min-h-[66px] items-center gap-2.5 border-b border-white/10 bg-[#11131a] px-4 py-3 text-white">
             <div className="grid h-11 w-11 shrink-0 -rotate-2 place-items-center rounded-[13px] border border-white/20 bg-[#191c24] text-xs font-black tracking-tighter">
-              <span><b className="text-[#f4d13f]">人</b><i className="mx-0.5 not-italic text-white/30">/</i><b className="text-[#46d6e7]">AI</b></span>
+              <span><b className="text-[#e5484d]">人</b><i className="mx-0.5 not-italic text-white/30">/</i><b className="text-[#46d6e7]">AI</b></span>
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[13px] font-black tracking-[0.06em]">みたかAI！これが人類だ！</p>
-              <p className="mt-0.5 text-[8px] font-extrabold tracking-[0.18em] text-white/40">HUMANITY COMEBACK BATTLE</p>
+              <p className="truncate text-[13px] font-black tracking-[0.06em]">たかがAI、あがけ人類</p>
             </div>
             <DevNavLink />
           </header>
