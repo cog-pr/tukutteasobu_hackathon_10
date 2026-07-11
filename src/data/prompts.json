@@ -1,0 +1,218 @@
+[
+  {
+    "id": "prompt_001",
+    "type": "text",
+    "text": "絶対に行きたくないコンビニ。その特徴とは？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_002",
+    "type": "text",
+    "text": "この遊園地、たぶん今日で閉園だな。なぜ？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_003",
+    "type": "text",
+    "text": "未来の冷蔵庫に追加された余計な機能とは？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_004",
+    "type": "text",
+    "text": "世界一せっかちなレストラン、どんな店？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_005",
+    "type": "text",
+    "text": "誰も欲しがらない新しい祝日とは？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_006",
+    "type": "text",
+    "text": "このロボット、全然役に立たない。何をする？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_007",
+    "type": "text",
+    "text": "校長先生の話が今日は短い。何があった？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_008",
+    "type": "text",
+    "text": "こんな目覚まし時計なら二度寝してしまう。どんな時計？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_009",
+    "type": "text",
+    "text": "宇宙人が地球に来て最初に驚いたこととは？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_010",
+    "type": "text",
+    "text": "人気のないヒーロー、その決めぜりふとは？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_011",
+    "type": "text",
+    "text": "動物園の新サービス、ちょっと変。どんなサービス？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_012",
+    "type": "text",
+    "text": "透明人間が一日だけ困ったこととは？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_013",
+    "type": "text",
+    "text": "この旅館、落ち着かないな。何がある？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_014",
+    "type": "text",
+    "text": "新発売の傘、まったく売れない理由とは？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_015",
+    "type": "text",
+    "text": "世界一静かな運動会、何が行われる？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_016",
+    "type": "text",
+    "text": "猫が社長の会社で起こりそうなこととは？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_017",
+    "type": "text",
+    "text": "魔法学校の入学試験、最後の問題とは？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_018",
+    "type": "text",
+    "text": "この自動販売機、買うのに勇気がいる。なぜ？",
+    "category": "normal"
+  },
+  {
+    "id": "prompt_019",
+    "type": "text",
+    "text": "ちょっと頼りない怪獣の名前とは？",
+    "category": "name"
+  },
+  {
+    "id": "prompt_020",
+    "type": "text",
+    "text": "絶対に速くなさそうな新幹線の名前とは？",
+    "category": "name"
+  },
+  {
+    "id": "prompt_021",
+    "type": "text",
+    "text": "何も解決しなさそうな探偵の名前とは？",
+    "category": "name"
+  },
+  {
+    "id": "prompt_022",
+    "type": "text",
+    "text": "すぐに閉店しそうなカフェの名前とは？",
+    "category": "name"
+  },
+  {
+    "id": "prompt_023",
+    "type": "text",
+    "text": "弱そうだけど応援したくなる必殺技の名前とは？",
+    "category": "name"
+  },
+  {
+    "id": "prompt_024",
+    "type": "text",
+    "text": "一度は乗ってみたい雲の名前とは？",
+    "category": "name"
+  },
+  {
+    "id": "prompt_025",
+    "type": "text",
+    "text": "まったく怖くないお化け屋敷の名前とは？",
+    "category": "name"
+  },
+  {
+    "id": "prompt_026",
+    "type": "text",
+    "text": "どこにも連れていってくれなさそうな船の名前とは？",
+    "category": "name"
+  },
+  {
+    "id": "prompt_027",
+    "type": "text",
+    "text": "新しいことわざ「急がば○○」。何が入る？",
+    "category": "fill"
+  },
+  {
+    "id": "prompt_028",
+    "type": "text",
+    "text": "未来の教科書にある「○○の歴史」。何の歴史？",
+    "category": "fill"
+  },
+  {
+    "id": "prompt_029",
+    "type": "text",
+    "text": "桃太郎の新しい仲間は○○。何が入る？",
+    "category": "fill"
+  },
+  {
+    "id": "prompt_030",
+    "type": "text",
+    "text": "本日のラッキーアイテムは「○○」。何？",
+    "category": "fill"
+  },
+  {
+    "id": "prompt_031",
+    "type": "text",
+    "text": "伝説の料理人、その隠し味は○○。何？",
+    "category": "fill"
+  },
+  {
+    "id": "prompt_032",
+    "type": "text",
+    "text": "新機能「ボタンを押すと○○」。何が起きる？",
+    "category": "fill"
+  },
+  {
+    "id": "prompt_033",
+    "type": "text",
+    "text": "百年後の流行語は「○○」。何が入る？",
+    "category": "fill"
+  },
+  {
+    "id": "prompt_034",
+    "type": "text",
+    "text": "世界一短い昔話「むかしむかし、○○」。続きをどうぞ",
+    "category": "fill"
+  },
+  {
+    "id": "prompt_035",
+    "type": "text",
+    "text": "天気予報「明日は一時○○でしょう」。何が降る？",
+    "category": "fill"
+  },
+  {
+    "id": "prompt_036",
+    "type": "text",
+    "text": "謎の張り紙「○○禁止」。何が禁止されている？",
+    "category": "fill"
+  }
+]
