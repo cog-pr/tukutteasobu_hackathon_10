@@ -71,6 +71,47 @@ APIキーなどの Secret 値は `wrangler.jsonc` やリポジトリへ直接書
 - **ローカル**: リポジトリ直下に `.dev.vars` ファイルを作成し、`NAME=value` の形式で記述します
   （`.dev.vars` は `.gitignore` 対象です。コミットしないでください）。
 
+AI回答生成サービスでは、以下のSecret／環境変数を使用します。
+
+```text
+AI_PROVIDER
+OPENAI_API_KEY
+OPENAI_MODEL
+MINIMAX_API_KEY
+MINIMAX_MODEL
+```
+
+本番環境ではAPIキーをWrangler Secretとして登録します。
+
+```bash
+npx wrangler secret put OPENAI_API_KEY
+# MiniMaxを使用する場合
+npx wrangler secret put MINIMAX_API_KEY
+```
+
+モデル名はコードへ直接書かず、デプロイ環境の変数として`OPENAI_MODEL`を設定してください。
+ローカル確認時は、コミット対象外の`.dev.vars`へ次の形式で設定します。
+
+```text
+OPENAI_API_KEY=your-local-key
+OPENAI_MODEL=your-model-id
+```
+
+MiniMaxを使用する場合は、`.dev.vars`を次のように設定します。
+
+```text
+AI_PROVIDER=minimax
+MINIMAX_API_KEY=your-local-key
+MINIMAX_MODEL=your-model-id
+```
+
+`AI_PROVIDER`を省略した場合はOpenAIを使用します。設定できる値は`openai`または
+`minimax`です。プロバイダーごとのAPIキーを別々に保持し、別サービスの接続先へ
+誤送信しない構成です。
+
+どちらかが未設定の場合やOpenAI APIが失敗した場合は、ゲームを中断せず、リポジトリ内の固定回答へ
+自動的に切り替わります。APIキーやAPIレスポンス全体をログへ出力しない実装です。
+
 ## テスト方法
 
 ```bash

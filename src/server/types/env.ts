@@ -4,4 +4,9 @@
 // string へ広げる。
 export type Env = Omit<Cloudflare.Env, "ENVIRONMENT"> & {
   ENVIRONMENT?: string;
+  AI_PROVIDER?: string;
+  OPENAI_API_KEY?: string;
+  OPENAI_MODEL?: string;
+  MINIMAX_API_KEY?: string;
+  MINIMAX_MODEL?: string;
 };
