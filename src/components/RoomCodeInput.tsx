@@ -4,13 +4,14 @@ type RoomCodeInputProps = {
   value: string
   onChange: (value: string) => void
   length?: number
+  disabled?: boolean
 }
 
 /**
  * 6桁のルームコードを1文字ずつのボックスで入力する。
  * 入力すると自動的に次のボックスへフォーカスが移動する。
  */
-export function RoomCodeInput({ value, onChange, length = 6 }: RoomCodeInputProps) {
+export function RoomCodeInput({ value, onChange, length = 6, disabled = false }: RoomCodeInputProps) {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
   const chars = Array.from({ length }, (_, index) => value[index] ?? '')
 
@@ -47,6 +48,8 @@ export function RoomCodeInput({ value, onChange, length = 6 }: RoomCodeInputProp
           onKeyDown={(event) => handleKeyDown(index, event)}
           inputMode="text"
           maxLength={1}
+          disabled={disabled}
+          aria-label={`ルームコード${index + 1}文字目`}
           className="h-12 w-10 rounded-[10px] border-2 border-[#c7c2b8] bg-white text-center text-xl font-black uppercase text-[#17191f] outline-none transition focus:border-[#17191f] focus:shadow-[0_0_0_4px_rgba(244,209,63,0.18)]"
         />
       ))}

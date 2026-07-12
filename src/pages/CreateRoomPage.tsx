@@ -1,23 +1,42 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { createRoom } from '../client/services/rooms'
+import { savePlayerSession, type PlayerSession } from '../client/services/playerSession'
+import { getApiErrorMessage } from '../client/services/apiClient'
+import { useSubmitLock } from '../client/hooks/useSubmitLock'
 import { Button } from '../components/Button'
 import { Card } from '../components/Card'
 import { PhoneScreen } from '../components/PhoneScreen'
 import { RoomCodeBadge } from '../components/RoomCodeBadge'
 import { TextField } from '../components/TextField'
-import { DUMMY_ROOM_CODE } from '../data/dummyData'
-import { useLocalGame } from '../client/hooks/useLocalGame'
-
-const MAX_NAME_LENGTH = 10
+import { GAME_CONFIG } from '../shared/constants'
+import { validatePlayerName } from '../shared/validation/playerName'
 
 export function CreateRoomPage() {
-  const { actions } = useLocalGame()
   const [playerName, setPlayerName] = useState('')
-  const [created, setCreated] = useState(false)
+  const [session, setSession] = useState<PlayerSession | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const { isSubmitting, run } = useSubmitLock()
+  const nameValidation = validatePlayerName(playerName)
 
-  const isNameValid = playerName.trim().length > 0 && Array.from(playerName).length <= MAX_NAME_LENGTH
+  const handleCreate = async () => {
+    if (!nameValidation.valid) {
+      setErrorMessage(nameValidation.message)
+      return
+    }
 
-  if (created) {
+    setErrorMessage(null)
+    try {
+      const response = await run(() => createRoom({ playerName: nameValidation.value }))
+      if (!response) return
+      savePlayerSession(response)
+      setSession(response)
+    } catch (error) {
+      setErrorMessage(getApiErrorMessage(error))
+    }
+  }
+
+  if (session) {
     return (
       <PhoneScreen className="gap-4">
         <div className="flex items-center gap-3">
@@ -31,8 +50,7 @@ export function CreateRoomPage() {
           <h1 className="text-lg font-bold text-neutral-900">ルームを作成しました</h1>
         </div>
 
-        <RoomCodeBadge roomCode={DUMMY_ROOM_CODE} />
-
+        <RoomCodeBadge roomCode={session.roomCode} />
         <p className="text-sm text-neutral-500">このコードをほかのプレイヤーに伝えてください。</p>
 
         <div className="mt-auto flex flex-col gap-3">
@@ -65,14 +83,13 @@ export function CreateRoomPage() {
 
       <TextField
         label="プレイヤー名"
-        maxLength={MAX_NAME_LENGTH}
+        maxLength={GAME_CONFIG.maxPlayerNameLength}
         value={playerName}
+        disabled={isSubmitting}
         onChange={(event) => setPlayerName(event.target.value)}
         placeholder="あなたの名前を入力"
-        helperText="10文字以内"
-        errorMessage={
-          Array.from(playerName).length > MAX_NAME_LENGTH ? '10文字以内で入力してください。' : undefined
-        }
+        helperText={`${GAME_CONFIG.maxPlayerNameLength}文字以内`}
+        errorMessage={playerName.length > 0 && !nameValidation.valid ? nameValidation.message : undefined}
       />
 
       <div className="grid h-16 place-items-center rounded-xl border border-dashed border-neutral-300 text-center text-xs text-neutral-400">
@@ -81,9 +98,11 @@ export function CreateRoomPage() {
         最大プレイヤー数など
       </div>
 
+      {errorMessage && <p role="alert" className="text-sm font-bold text-rose-600">{errorMessage}</p>}
+
       <div className="mt-auto flex flex-col gap-3">
-        <Button variant="primary" disabled={!isNameValid} onClick={() => { actions.createPlayers(playerName); setCreated(true) }}>
-          ルームを作成する
+        <Button variant="primary" disabled={!nameValidation.valid || isSubmitting} onClick={handleCreate}>
+          {isSubmitting ? 'ルームを作成しています…' : 'ルームを作成する'}
         </Button>
       </div>
     </PhoneScreen>
