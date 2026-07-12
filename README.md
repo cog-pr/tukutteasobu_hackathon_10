@@ -34,13 +34,14 @@ npm run build
 ## サーバー（Cloudflare Worker）のローカル起動方法
 
 サーバーは [Wrangler](https://developers.cloudflare.com/workers/wrangler/) を使ってローカルで
-起動します。フロントエンド（`npm run dev`）とは別プロセスとして起動してください。
+起動します。
 
 ```bash
 npm run dev:worker
 ```
 
-デフォルトで `http://127.0.0.1:8787` で起動します。動作確認例:
+デフォルトで `http://127.0.0.1:8787`（起動時のログに表示されるポート。ポートが使用中の
+場合は自動的にずれることがあります）で起動します。動作確認例:
 
 ```bash
 curl http://127.0.0.1:8787/api/health
@@ -74,18 +75,35 @@ curl http://127.0.0.1:8787/api/dev/rooms/AB37X2/state
 確認するための開発用APIです。本番環境（`ENVIRONMENT=production`）では 404 を返します。ルームの
 作成・参加・確認には `/api/rooms` 系の正式なAPIを使用してください。
 
-フロントエンド開発用の `vite`（HTTP: 5173）とサーバー用の `wrangler dev`（デフォルト HTTP:
-8787、ポートが使用中の場合は自動的にずれることがあります）は別々のプロセスとして起動します。
-フロントエンドから実際にサーバーへ接続するには、リポジトリ直下に `.env.local` を作成し、
-`wrangler dev` の起動ログに表示されたURLを `VITE_API_BASE_URL` として指定してください
-（`.env.local` は `.gitignore` 対象です）。
+ローカルでの動かし方は2通りあります。
 
-```text
-VITE_API_BASE_URL=http://127.0.0.1:8787
-```
+- **フロントエンドを個別に高速リロードしながら開発する場合**: `vite`（HTTP: 5173）と
+  `wrangler dev`（デフォルト HTTP: 8787）を別プロセスとして起動します。この場合、
+  フロントエンドから実際のサーバーへ接続するために、リポジトリ直下に `.env.local` を作成し、
+  `wrangler dev` の起動ログに表示されたURLを `VITE_API_BASE_URL` として指定してください
+  （`.env.local` は `.gitignore` 対象です）。
 
-未設定の場合は `window.location.origin`（`vite`のURL）宛にリクエストしてしまい、サーバーに
-届きません。
+  ```text
+  VITE_API_BASE_URL=http://127.0.0.1:8787
+  ```
+
+  未設定の場合は `window.location.origin`（`vite`のURL）宛にリクエストしてしまい、サーバーに
+  届きません。
+
+- **本番相当の構成（フロントエンド・APIを同一Workerから配信）で確認する場合**: `wrangler.jsonc`
+  の `assets` 設定により、ビルド済みのフロントエンド（`dist/`）とAPIを同じWorkerから配信できます。
+
+  ```bash
+  npm run build
+  npm run dev:worker
+  ```
+
+  起動後のURL（例: `http://127.0.0.1:8787`）をブラウザで開くだけで、フロントエンドと
+  API・WebSocketが同一オリジンから配信されるため `VITE_API_BASE_URL` の設定は不要です。
+  実機（スマートフォン）で確認する場合は、PCと同じWi-Fiに接続したうえでPCのLAN内IPアドレス
+  （例: `http://192.168.x.x:8787`）を各端末で開いてください（複数プロセス・複数ポートを
+  意識する必要がなく、4端末での確認に向いています）。フロントエンドの変更を反映するには
+  `npm run build` を都度実行してください。
 
 ## Durable Object migration の適用方法
 
@@ -159,8 +177,13 @@ Vitest の `projects` 機能で、フロントエンドの既存テストと、`
 npm run deploy
 ```
 
-内部で `wrangler deploy` を実行し、Worker と Durable Object の migration を Cloudflare へ反映
-します。事前に `wrangler login` などで Cloudflare アカウントの認証が必要です。
+内部で `npm run build`（フロントエンドのビルド）→ `wrangler deploy` を実行します。
+`wrangler.jsonc` の `assets` 設定により、ビルド済みのフロントエンド（`dist/`）とAPI・
+WebSocketを同一Workerから同一オリジンで配信するため、フロントエンド側の追加設定
+（`VITE_API_BASE_URL`等）やCORSの実装は不要です。Durable Objectのmigrationも同時に
+Cloudflareへ反映されます。事前に `wrangler login` などで Cloudflare アカウントの認証が
+必要です。AI回答生成用のSecret（前述）は本番では別途 `wrangler secret put` で設定して
+ください（未設定でもゲーム自体は固定回答で動作します）。
 
 ## ゲーム画面の確認方法
 

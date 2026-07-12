@@ -7,6 +7,11 @@
   "vars": {
     "ENVIRONMENT": "development",
   },
+  // フロントエンドのビルド成果物を同一Workerから配信する。/api/* はどのアセットにも一致しないため
+  // 自動的にWorker本体(Hono)へフォールスルーする。
+  "assets": {
+    "directory": "./dist",
+  },
   "durable_objects": {
     "bindings": [
       {
