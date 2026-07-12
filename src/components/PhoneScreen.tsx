@@ -21,7 +21,7 @@ export function PhoneScreen({ children, className = '', bare = false }: PhoneScr
               <span><b className="text-[#e5484d]">人</b><i className="mx-0.5 not-italic text-white/30">/</i><b className="text-[#46d6e7]">AI</b></span>
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[13px] font-black tracking-[0.06em]">たかがAI、あがけ人類</p>
+              <p className="truncate text-[13px] font-black tracking-[0.06em]">たかがAI、されどAI。</p>
             </div>
             <DevNavLink />
           </header>

@@ -13,10 +13,10 @@ export function TopPage() {
         <h1 className="relative mt-4 text-[clamp(42px,12vw,58px)] font-black leading-[1.02] tracking-[-0.07em] text-[#17191f]">
           <span className="yellow-marker">たかが<span className="text-[#0a9bb0]">AI</span>、</span>
           <br />
-          <span className="yellow-marker">あがけ<span className="text-[#d93843]">人類</span>。</span>
+          <span className="yellow-marker">されど<span className="text-[#d93843]">AI</span>。</span>
         </h1>
         <Card className="relative mt-5 border-[#d8d3c9] bg-[#fffdf8]/90 text-left text-sm leading-relaxed text-[#3e4149] backdrop-blur">
-          4~5人のプレイヤーで遊ぶ大喜利バトル。
+          4人のプレイヤーで遊ぶ大喜利バトル。
           <br />
           人間とAIが同じお題に答え、みんなで一番面白い回答に投票！
           <br />
