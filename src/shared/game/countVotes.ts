@@ -1,4 +1,5 @@
-export type VoteChoice = "A" | "B";
+import type { VoteChoice } from '../types/game'
+export type { VoteChoice } from '../types/game'
 
 export type VoteResult = {
   countA: number;

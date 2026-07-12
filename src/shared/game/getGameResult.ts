@@ -1,7 +1,6 @@
-export type Score = {
-  human: number;
-  ai: number;
-};
+import type { Score } from '../types/game'
+import { GAME_CONFIG } from '../constants'
+export type { Score } from '../types/game'
 
 export type GameResult =
   | {
@@ -15,7 +14,7 @@ export type GameResult =
 
 export function getGameResult(
   score: Score,
-  winningScore: number = 3,
+  winningScore: number = GAME_CONFIG.winningScore,
 ): GameResult {
   if (score.human >= winningScore) {
     return { finished: true, winner: "human" };

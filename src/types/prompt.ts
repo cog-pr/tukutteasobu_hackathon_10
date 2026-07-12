@@ -1,6 +1,2 @@
-export type Prompt = {
-  id: string
-  type: 'text'
-  text: string
-  category: 'normal' | 'name' | 'fill'
-}
+/** @deprecated Import from src/shared/types/game instead. */
+export type { Prompt } from '../shared/types/game'
