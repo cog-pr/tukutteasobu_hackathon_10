@@ -12,5 +12,5 @@
     "noEmit": true,
     "types": ["@cloudflare/workers-types", "@cloudflare/vitest-pool-workers/types"]
   },
-  "include": ["src/server", "src/shared", "worker-configuration.d.ts"]
+  "include": ["src/server", "src/shared", "src/data/prompts.json", "worker-configuration.d.ts"]
 }

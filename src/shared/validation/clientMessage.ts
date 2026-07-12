@@ -7,7 +7,7 @@ export function validateClientMessage(input: unknown): ValidationResult<ClientMe
   if (!isRecord(input) || typeof input.type !== 'string') return { valid: false, message: '不正なWebSocketメッセージです。' }
   switch (input.type) {
     case 'READY': if (exactKeys(input, ['type', 'ready']) && typeof input.ready === 'boolean') return { valid: true, value: input as ClientMessage }; break
-    case 'START_GAME': case 'PING': if (exactKeys(input, ['type'])) return { valid: true, value: input as ClientMessage }; break
+    case 'START_GAME': case 'PING': case 'REMATCH': if (exactKeys(input, ['type'])) return { valid: true, value: input as ClientMessage }; break
     case 'SUBMIT_ANSWER': if (exactKeys(input, ['type', 'answer']) && validateAnswer(input.answer).valid) return { valid: true, value: input as ClientMessage }; break
     case 'CAST_VOTE': if (exactKeys(input, ['type', 'choice']) && (input.choice === 'A' || input.choice === 'B')) return { valid: true, value: input as ClientMessage }; break
     case 'REVENGE_PROGRESS': if (exactKeys(input, ['type', 'value']) && typeof input.value === 'number' && Number.isFinite(input.value) && input.value >= 0) return { valid: true, value: input as ClientMessage }; break

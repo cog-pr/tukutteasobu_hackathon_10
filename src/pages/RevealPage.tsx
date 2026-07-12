@@ -1,2 +1,36 @@
-import { useNavigate } from 'react-router-dom'; import { AnswerCard } from '../components/AnswerCard'; import { Button } from '../components/Button'; import { Card } from '../components/Card'; import { PhoneScreen } from '../components/PhoneScreen'; import { ScoreBoard } from '../components/ScoreBoard'; import { useLocalGame } from '../client/hooks/useLocalGame'; import { countVotes } from '../shared/game/countVotes'
-export function RevealPage() { const navigate = useNavigate(); const { state, actions } = useLocalGame(); const round = state.round; if (!round) return null; const counts = countVotes(round.votes); const answer = (letter: 'A'|'B') => round.answerOrder[letter] === 'human' ? round.humanAnswer || '（未回答）' : round.aiAnswer; const challenger = state.players.find((p) => p.id === round.challengerId)?.name; return <PhoneScreen className="gap-4"><ScoreBoard score={state.score}/><Card><p className="text-sm font-bold">Q. {round.prompt.text}</p></Card><AnswerCard label="A" text={answer('A')} revealTag={round.answerOrder.A} attributionName={round.answerOrder.A === 'human' ? challenger : undefined} voteCount={counts.countA}/><AnswerCard label="B" text={answer('B')} revealTag={round.answerOrder.B} attributionName={round.answerOrder.B === 'human' ? challenger : undefined} voteCount={counts.countB}/><Card className={round.winner === 'human' ? 'border-[#e5484d] bg-[#fff0f1]' : 'border-[#46d6e7] bg-[#e8fbfd]'}><p className="text-center text-xs font-bold">このラウンドの勝者</p><p className="mt-1 text-center text-2xl font-black">{round.winner === 'human' ? '人類！' : 'AI！'}</p>{round.humanForfeit && <p className="text-center text-xs">未回答による不戦敗</p>}</Card><div className="mt-auto">{round.winner === 'ai' ? <Button onClick={() => { actions.beginRevenge(); navigate('/revenge') }}>超連打チャレンジへ</Button> : <Button onClick={() => { actions.finishRound(true, false); if (state.score.human + 1 >= 3) navigate('/result'); else actions.startRound().then(() => navigate('/round-intro')) }}>次へ</Button>}</div></PhoneScreen> }
+import { AnswerCard } from '../components/AnswerCard'
+import { Card } from '../components/Card'
+import { CountdownBadge } from '../components/CountdownBadge'
+import { PhoneScreen } from '../components/PhoneScreen'
+import { ScoreBoard } from '../components/ScoreBoard'
+import { useCountdown } from '../client/hooks/useCountdown'
+import { useRoomSocketContext } from '../client/context/RoomSocketContext'
+import { GAME_CONFIG } from '../shared/constants'
+
+export function RevealPage() {
+  const { roomState } = useRoomSocketContext()
+  const round = roomState?.round
+  const remaining = useCountdown(roomState?.deadlineAt ?? null)
+  if (!round || !round.isRevealed) return null
+
+  return (
+    <PhoneScreen className="gap-4">
+      <ScoreBoard score={roomState?.score ?? { human: 0, ai: 0 }} />
+      <div className="flex justify-end"><CountdownBadge remainingSeconds={remaining} /></div>
+      <Card><p className="text-sm font-bold">Q. {round.prompt.text}</p></Card>
+      {round.isForfeit ? (
+        <Card className="border-[#e5484d] bg-[#fff0f1] text-center"><p className="text-sm font-bold text-[#a62f35]">未回答による不戦敗</p></Card>
+      ) : (
+        <>
+          <AnswerCard label="A" text={round.answerA ?? ''} revealTag={round.answerOrder?.A} attributionName={round.answerOrder?.A === 'human' ? round.challengerName : undefined} voteCount={round.voteCounts.A} />
+          <AnswerCard label="B" text={round.answerB ?? ''} revealTag={round.answerOrder?.B} attributionName={round.answerOrder?.B === 'human' ? round.challengerName : undefined} voteCount={round.voteCounts.B} />
+        </>
+      )}
+      <Card className={round.winner === 'human' ? 'border-[#e5484d] bg-[#fff0f1]' : 'border-[#46d6e7] bg-[#e8fbfd]'}>
+        <p className="text-center text-xs font-bold">このラウンドの勝者</p>
+        <p className="mt-1 text-center text-2xl font-black">{round.winner === 'human' ? '人類！' : 'AI！'}</p>
+      </Card>
+      <p className="text-center text-xs text-neutral-400">{GAME_CONFIG.revealDwellMs / 1000}秒後に自動で進みます</p>
+    </PhoneScreen>
+  )
+}
