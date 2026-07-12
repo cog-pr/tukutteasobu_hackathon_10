@@ -5,7 +5,7 @@ Durable Object によるサーバー（`src/server/`）で構成されていま�
 
 現時点ではフロントエンドとサーバーAPIは接続されていません（フロントエンドは
 `src/data/dummyData.ts` のダミーデータで動作します）。サーバー側はヘルスチェックAPIと、
-Durable Objectの動作確認用の開発用APIのみを提供する最小構成です。
+ルーム作成・参加・確認のHTTP API、Durable Objectの動作確認用の開発用APIを提供します。
 
 ## 必要な環境
 
@@ -45,13 +45,33 @@ npm run dev:worker
 curl http://127.0.0.1:8787/api/health
 # => {"ok":true}
 
-curl http://127.0.0.1:8787/api/dev/rooms/AB37X2/state
-# => {"version":1,"roomCode":"AB37X2","phase":"LOBBY","createdAt":...,"updatedAt":...}
+curl -X POST http://127.0.0.1:8787/api/rooms \
+  -H "Content-Type: application/json" \
+  -d '{"playerName":"たけし"}'
+# => {"roomCode":"AB37X2","playerId":"player_xxx","playerToken":"token_xxx"}
+
+curl -X POST http://127.0.0.1:8787/api/rooms/AB37X2/join \
+  -H "Content-Type: application/json" \
+  -d '{"playerName":"サトウ"}'
+# => {"playerId":"player_yyy","playerToken":"token_yyy"}
+
+curl http://127.0.0.1:8787/api/rooms/AB37X2
+# => {"exists":true,"canJoin":true,"playerCount":2,"hasStarted":false}
 ```
 
-`api/dev/rooms/:roomCode/state` は Worker から Durable Object（`GameRoom`）を呼び出せることを
-確認するための開発用APIです。本番環境（`ENVIRONMENT=production`）では 404 を返します。後続の
-ルームAPI実装Issueで置き換え・削除される前提のため、正式なルームAPIではありません。
+`playerId`・`playerToken` はルーム作成・参加時にのみ発行され、`GET /api/rooms/:roomCode` の
+レスポンスには含まれません。リクエストが不正な場合や、ルームが満員・開始済み・名前重複などの
+理由で処理できない場合は `{"code":"ROOM_FULL","message":"このルームは満員です"}` のように
+`code`／`message` を持つJSONを400/404/409のいずれかのステータスで返します。
+
+```bash
+curl http://127.0.0.1:8787/api/dev/rooms/AB37X2/state
+# => {"version":2,"roomCode":"AB37X2","phase":"LOBBY","players":[...],...}
+```
+
+`api/dev/rooms/:roomCode/state` は Worker から Durable Object（`GameRoom`）の内部状態を直接
+確認するための開発用APIです。本番環境（`ENVIRONMENT=production`）では 404 を返します。ルームの
+作成・参加・確認には `/api/rooms` 系の正式なAPIを使用してください。
 
 現時点ではフロントエンドとサーバーは連携していないため、フロントエンド開発用の `vite`（HTTP:
 5173）とサーバー確認用の `wrangler dev`（HTTP: 8787）を別々のプロセスとして起動する運用です。
