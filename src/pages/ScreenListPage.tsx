@@ -12,6 +12,7 @@ export function ScreenListPage() {
         <h1 className="mb-1 text-lg font-bold text-neutral-900">画面一覧（開発用）</h1>
         <p className="mb-4 text-xs text-neutral-400">
           本番の画面遷移はゲーム進行にもとづきます。ここでは確認用に各画面へ直接移動できます。
+          ロビー以降の画面はルームに参加していないと接続待ち表示のままか、正しいフェーズへ自動的に戻されます。
         </p>
         <ul className="flex flex-col gap-2">
           {ROUTES.map((route) => (

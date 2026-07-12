@@ -1,2 +1,44 @@
-import { useEffect, useMemo, useState } from 'react'; import { useNavigate } from 'react-router-dom'; import { AnswerCard } from '../components/AnswerCard'; import { Card } from '../components/Card'; import { CountdownBadge } from '../components/CountdownBadge'; import { PhoneScreen } from '../components/PhoneScreen'; import { ScoreBoard } from '../components/ScoreBoard'; import { TimerBar } from '../components/TimerBar'; import { useLocalGame } from '../client/hooks/useLocalGame'; import { getRemainingSeconds } from '../client/lib/time'; import type { VoteChoice } from '../shared/game/countVotes'
-export function VotingPage() { const navigate = useNavigate(); const { state, actions } = useLocalGame(); const round = state.round; const [remaining, setRemaining] = useState(() => getRemainingSeconds(state.deadlineAt)); const voters = useMemo(() => state.players.filter((player) => player.id !== round?.challengerId), [state.players, round?.challengerId]); const voter = voters[Object.keys(round?.votes ?? {}).length]; const answer = (letter: VoteChoice) => round?.answerOrder[letter] === 'human' ? round.humanAnswer : round?.aiAnswer ?? ''; const vote = (choice: VoteChoice) => { if (!voter) return; const last = Object.keys(round?.votes ?? {}).length === voters.length - 1; actions.vote(voter.id, choice); if (last) navigate('/reveal') }; useEffect(() => { let handled = false; const tick = () => { const next = getRemainingSeconds(state.deadlineAt); setRemaining(next); if (!next && !handled) { handled = true; vote('A') } }; const id = window.setInterval(tick, 250); return () => clearInterval(id) }, [state.deadlineAt]); return <PhoneScreen className="gap-4"><ScoreBoard score={state.score}/><p className="text-center text-lg font-black">どっちが面白い？</p><Card><p className="text-sm font-bold">Q. {round?.prompt.text}</p></Card><div className="flex items-center justify-between rounded-xl bg-[#fff8cc] p-3 text-sm font-black"><span>現在投票中: {voter?.name}</span><CountdownBadge remainingSeconds={remaining}/></div><TimerBar remainingSeconds={remaining} totalSeconds={20}/><AnswerCard label="A" text={answer('A')} onClick={() => vote('A')}/><AnswerCard label="B" text={answer('B')} onClick={() => vote('B')}/><p className="text-center text-xs text-neutral-400">投票済み {Object.keys(round?.votes ?? {}).length} / {voters.length}</p></PhoneScreen> }
+import { AnswerCard } from '../components/AnswerCard'
+import { Card } from '../components/Card'
+import { CountdownBadge } from '../components/CountdownBadge'
+import { PhoneScreen } from '../components/PhoneScreen'
+import { ScoreBoard } from '../components/ScoreBoard'
+import { TimerBar } from '../components/TimerBar'
+import { useCountdown } from '../client/hooks/useCountdown'
+import { useRoomSocketContext } from '../client/context/RoomSocketContext'
+import { GAME_CONFIG } from '../shared/constants'
+import type { VoteChoice } from '../shared/types/game'
+
+export function VotingPage() {
+  const { roomState, connectionStatus, castVote } = useRoomSocketContext()
+  const round = roomState?.round
+  const remaining = useCountdown(roomState?.deadlineAt ?? null)
+  const hasVoted = round && !round.isRevealed && round.hasVoted
+  const canVote = connectionStatus === 'connected' && remaining > 0 && !hasVoted
+
+  if (hasVoted) {
+    return (
+      <PhoneScreen className="items-center justify-center gap-4 text-center">
+        <ScoreBoard score={roomState?.score ?? { human: 0, ai: 0 }} />
+        <Card>
+          <p className="text-base font-bold text-neutral-900">投票を受け付けました。</p>
+          <p className="mt-2 text-sm text-neutral-500">他の人の投票を待っています…</p>
+        </Card>
+      </PhoneScreen>
+    )
+  }
+
+  const vote = (choice: VoteChoice) => { if (canVote) castVote(choice) }
+
+  return (
+    <PhoneScreen className="gap-4">
+      <ScoreBoard score={roomState?.score ?? { human: 0, ai: 0 }} />
+      <p className="text-center text-lg font-black">どっちが面白い？</p>
+      <Card><p className="text-sm font-bold">Q. {round && !round.isRevealed ? round.prompt.text : ''}</p></Card>
+      <div className="flex justify-end"><CountdownBadge remainingSeconds={remaining} /></div>
+      <TimerBar remainingSeconds={remaining} totalSeconds={GAME_CONFIG.voteTimeMs / 1000} />
+      <AnswerCard label="A" text={round && !round.isRevealed ? round.answerA ?? '' : ''} disabled={!canVote} onClick={() => vote('A')} />
+      <AnswerCard label="B" text={round && !round.isRevealed ? round.answerB ?? '' : ''} disabled={!canVote} onClick={() => vote('B')} />
+    </PhoneScreen>
+  )
+}
