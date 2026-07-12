@@ -54,7 +54,7 @@ describe("GameRoom#createRoom", () => {
         name: "たけし",
         isHost: true,
         joinOrder: 0,
-        isOnline: true,
+        isOnline: false,
       }),
     ]);
     expect(result.playerId).toMatch(/^player_/);
@@ -214,5 +214,57 @@ describe("GameRoom#getRoomInfo", () => {
       playerCount: 1,
       hasStarted: true,
     });
+  });
+});
+
+describe("GameRoom WebSocket", () => {
+  const nextMessage = (socket: WebSocket) => new Promise<string>((resolve) => {
+    socket.addEventListener("message", (event) => resolve(String(event.data)), { once: true });
+  });
+
+  async function connect(roomCode: string) {
+    const stub = env.GAME_ROOM.getByName(roomCode);
+    const created = await stub.createRoom(roomCode, "Host");
+    if (!created.ok) throw new Error("unreachable");
+    const response = await stub.fetch(new Request(`https://example.test/api/rooms/${roomCode}/ws?playerId=${encodeURIComponent(created.playerId)}&playerToken=${encodeURIComponent(created.playerToken)}`, { headers: { Upgrade: "websocket" } }));
+    const socket = response.webSocket!;
+    socket.accept();
+    return { stub, created, socket };
+  }
+
+  it("rejects invalid credentials", async () => {
+    const stub = env.GAME_ROOM.getByName("WSAUTH");
+    const created = await stub.createRoom("WSAUTH", "Host");
+    if (!created.ok) throw new Error("unreachable");
+    const response = await stub.fetch(new Request(`https://example.test/ws?playerId=${created.playerId}&playerToken=wrong`, { headers: { Upgrade: "websocket" } }));
+    expect(response.status).toBe(401);
+  });
+
+  it("sends STATE_SYNC, handles READY and responds to PING", async () => {
+    const { socket, created } = await connect("WSSYNC");
+    const initial = JSON.parse(await nextMessage(socket));
+    expect(initial.type).toBe("STATE_SYNC");
+    expect(initial.state.players[0].isOnline).toBe(true);
+    expect(JSON.stringify(initial)).not.toContain(created.playerToken);
+
+    const readyMessage = nextMessage(socket);
+    socket.send(JSON.stringify({ type: "READY", ready: true }));
+    const synced = JSON.parse(await readyMessage);
+    expect(synced.type).toBe("STATE_SYNC");
+    expect(synced.state.players[0].isReady).toBe(true);
+
+    const pongMessage = nextMessage(socket);
+    socket.send(JSON.stringify({ type: "PING" }));
+    expect(JSON.parse(await pongMessage)).toEqual({ type: "PONG" });
+    socket.close();
+  });
+
+  it("returns ERROR for an invalid message", async () => {
+    const { socket } = await connect("WSERR1");
+    await nextMessage(socket);
+    const errorMessage = nextMessage(socket);
+    socket.send("not-json");
+    expect(JSON.parse(await errorMessage)).toMatchObject({ type: "ERROR", code: "INVALID_MESSAGE" });
+    socket.close();
   });
 });

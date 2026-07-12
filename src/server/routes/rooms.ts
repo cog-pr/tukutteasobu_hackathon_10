@@ -8,6 +8,18 @@ const MAX_ROOM_CODE_ATTEMPTS = 20;
 
 export const rooms = new Hono<{ Bindings: Env }>();
 
+rooms.get("/:roomCode/ws", async (c) => {
+  if (c.req.header("Upgrade")?.toLowerCase() !== "websocket") {
+    return c.text("WebSocket upgrade required", 426);
+  }
+  const validation = validateGetRoomRequest({ roomCode: c.req.param("roomCode") });
+  if (!validation.valid) return c.json({ code: "INVALID_ROOM_CODE", message: validation.message }, 400);
+  const playerId = c.req.query("playerId");
+  const playerToken = c.req.query("playerToken");
+  if (!playerId || !playerToken) return c.json({ code: "AUTH_FAILED", message: "認証情報が必要です。" }, 401);
+  return c.env.GAME_ROOM.getByName(validation.value.roomCode).fetch(c.req.raw);
+});
+
 rooms.post("/", async (c) => {
   const body = await c.req.json().catch(() => null);
   const validation = validateCreateRoomRequest(body);
