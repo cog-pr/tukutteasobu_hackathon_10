@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tukutteasobu-hackathon-10",
+  "main": "src/server/index.ts",
+  "compatibility_date": "2026-07-12",
+  // ローカル/本番共通のデフォルト値。本番用に上書きする場合は `wrangler deploy --var ENVIRONMENT:production` 等で指定する。
+  "vars": {
+    "ENVIRONMENT": "development",
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "GAME_ROOM",
+        "class_name": "GameRoom",
+      },
+    ],
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["GameRoom"],
+    },
+  ],
+}

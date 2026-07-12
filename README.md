@@ -1,13 +1,18 @@
 # tukutteasobu_hackathon_10
 
-React、Vite、TypeScript、Tailwind CSS を使った最小構成のフロントエンドです。
+React、Vite、TypeScript、Tailwind CSS を使ったフロントエンドと、Hono + Cloudflare Workers /
+Durable Object によるサーバー（`src/server/`）で構成されています。
+
+現時点ではフロントエンドとサーバーAPIは接続されていません（フロントエンドは
+`src/data/dummyData.ts` のダミーデータで動作します）。サーバー側はヘルスチェックAPIと、
+Durable Objectの動作確認用の開発用APIのみを提供する最小構成です。
 
 ## 必要な環境
 
-- Node.js 20.19 以上、または 22.12 以上
+- Node.js 22.12 以上（Wrangler / Cloudflare Workers のローカル実行に Node.js 22 以上が必要です）
 - npm
 
-## 起動方法
+## フロントエンドの起動方法
 
 ```bash
 npm install
@@ -21,6 +26,69 @@ npm run dev
 ```bash
 npm run build
 ```
+
+`tsc -b` によるフロントエンド・サーバー双方の型チェックと、`vite build` によるフロントエンドの
+本番ビルドを行います。
+
+## サーバー（Cloudflare Worker）のローカル起動方法
+
+サーバーは [Wrangler](https://developers.cloudflare.com/workers/wrangler/) を使ってローカルで
+起動します。フロントエンド（`npm run dev`）とは別プロセスとして起動してください。
+
+```bash
+npm run dev:worker
+```
+
+デフォルトで `http://127.0.0.1:8787` で起動します。動作確認例:
+
+```bash
+curl http://127.0.0.1:8787/api/health
+# => {"ok":true}
+
+curl http://127.0.0.1:8787/api/dev/rooms/AB37X2/state
+# => {"version":1,"roomCode":"AB37X2","phase":"LOBBY","createdAt":...,"updatedAt":...}
+```
+
+`api/dev/rooms/:roomCode/state` は Worker から Durable Object（`GameRoom`）を呼び出せることを
+確認するための開発用APIです。本番環境（`ENVIRONMENT=production`）では 404 を返します。後続の
+ルームAPI実装Issueで置き換え・削除される前提のため、正式なルームAPIではありません。
+
+現時点ではフロントエンドとサーバーは連携していないため、フロントエンド開発用の `vite`（HTTP:
+5173）とサーバー確認用の `wrangler dev`（HTTP: 8787）を別々のプロセスとして起動する運用です。
+
+## Durable Object migration の適用方法
+
+Durable Object のクラス構成は `wrangler.jsonc` の `migrations` に定義しています。追加の手動操作は
+不要で、`npm run dev:worker`（ローカル）や `npm run deploy`（本番）を実行するたびに Wrangler が
+自動的に適用します。`wrangler.jsonc` の bindings を変更した場合は、`npx wrangler types` を再実行
+して `worker-configuration.d.ts`（生成された型定義。コミット対象）を更新してください。
+
+## Secret の設定方法
+
+APIキーなどの Secret 値は `wrangler.jsonc` やリポジトリへ直接書き込まないでください。
+
+- **本番**: `npx wrangler secret put <NAME>` で Cloudflare 側に安全に登録します。
+- **ローカル**: リポジトリ直下に `.dev.vars` ファイルを作成し、`NAME=value` の形式で記述します
+  （`.dev.vars` は `.gitignore` 対象です。コミットしないでください）。
+
+## テスト方法
+
+```bash
+npm run test
+```
+
+Vitest の `projects` 機能で、フロントエンドの既存テストと、`@cloudflare/vitest-pool-workers`
+（実際の Workers ランタイム上でHono/Durable Objectを動かすテスト基盤）によるサーバーのテストを
+まとめて実行します。
+
+## デプロイ方法
+
+```bash
+npm run deploy
+```
+
+内部で `wrangler deploy` を実行し、Worker と Durable Object の migration を Cloudflare へ反映
+します。事前に `wrangler login` などで Cloudflare アカウントの認証が必要です。
 
 ## ゲーム画面の確認方法
 
