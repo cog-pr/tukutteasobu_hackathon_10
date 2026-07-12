@@ -1,7 +1,5 @@
-export type AnswerOrder = {
-  A: "human" | "ai";
-  B: "human" | "ai";
-};
+import type { AnswerOrder } from '../types/game'
+export type { AnswerOrder } from '../types/game'
 
 export function assignAnswerOrder(): AnswerOrder {
   if (Math.random() < 0.5) {

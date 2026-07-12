@@ -1,13 +1,14 @@
-import { assignAnswerOrder, type AnswerOrder } from '../../shared/game/assignAnswerOrder'
+import { assignAnswerOrder } from '../../shared/game/assignAnswerOrder'
 import { countVotes, type VoteChoice } from '../../shared/game/countVotes'
-import { getGameResult, type Score } from '../../shared/game/getGameResult'
+import { getGameResult } from '../../shared/game/getGameResult'
 import { selectNextChallenger } from '../../shared/game/selectNextChallenger'
 import { prompts } from '../../data/prompts'
-import type { Player, RoundHistoryEntry } from '../../types/game'
+import { CHALLENGE_CONFIG, GAME_CONFIG } from '../../shared/constants'
+import type { AnswerOrder, GamePhase, Player, RoundHistoryEntry, Score } from '../../shared/types/game'
 import type { Prompt } from '../../types/prompt'
 import { generateAiAnswer } from '../services/ai'
 
-export type GamePhase = 'LOBBY' | 'ROUND_INTRO' | 'ANSWERING' | 'VOTING' | 'REVEAL' | 'REVENGE_ACTIVE' | 'ROUND_RESULT' | 'GAME_RESULT'
+export type { GamePhase } from '../../shared/types/game'
 export type LocalRound = { prompt: Prompt; challengerId: string; humanAnswer: string; aiAnswer: string; answerOrder: AnswerOrder; votes: Record<string, VoteChoice>; winner: 'human' | 'ai' | null; humanForfeit: boolean }
 export type LocalGameState = { players: Player[]; score: Score; roundNumber: number; usedPromptIds: string[]; challengerQueue: string[]; previousChallengerId: string | null; round: LocalRound | null; phase: GamePhase; deadlineAt: number | null; history: RoundHistoryEntry[] }
 
@@ -32,11 +33,11 @@ export const localGameStore = {
     const aiAnswer = await generateAiAnswer(prompt.id)
     set({ ...state, roundNumber: state.roundNumber + 1, usedPromptIds: [...used, prompt.id], challengerQueue: result.challengerQueue, previousChallengerId: result.nextChallengerId, phase: 'ROUND_INTRO', deadlineAt: null, round: { prompt, challengerId: result.nextChallengerId!, humanAnswer: '', aiAnswer, answerOrder: assignAnswerOrder(), votes: {}, winner: null, humanForfeit: false } })
   },
-  beginAnswering() { set({ ...state, phase: 'ANSWERING', deadlineAt: Date.now() + 45_000 }) },
-  submitAnswer(answer: string) { if (!state.round || state.round.humanAnswer) return; set({ ...state, phase: 'VOTING', deadlineAt: Date.now() + 20_000, round: { ...state.round, humanAnswer: answer } }) },
+  beginAnswering() { set({ ...state, phase: 'ANSWERING', deadlineAt: Date.now() + GAME_CONFIG.answerTimeMs }) },
+  submitAnswer(answer: string) { if (!state.round || state.round.humanAnswer) return; set({ ...state, phase: 'VOTING', deadlineAt: Date.now() + GAME_CONFIG.voteTimeMs, round: { ...state.round, humanAnswer: answer } }) },
   forfeitAnswer() { if (!state.round) return; set({ ...state, phase: 'REVEAL', deadlineAt: null, round: { ...state.round, humanForfeit: true, winner: 'ai' } }) },
-  vote(playerId: string, choice: VoteChoice) { if (!state.round || state.round.votes[playerId]) return; const votes = { ...state.round.votes, [playerId]: choice }; const done = Object.keys(votes).length === state.players.length - 1; if (!done) { set({ ...state, deadlineAt: Date.now() + 20_000, round: { ...state.round, votes } }); return } const result = countVotes(votes); const letter = result.winner === 'draw' ? 'A' : result.winner; set({ ...state, phase: 'REVEAL', deadlineAt: null, round: { ...state.round, votes, winner: state.round.answerOrder[letter] } }) },
-  beginRevenge() { set({ ...state, phase: 'REVENGE_ACTIVE', deadlineAt: Date.now() + 5_000 }) },
+  vote(playerId: string, choice: VoteChoice) { if (!state.round || state.round.votes[playerId]) return; const votes = { ...state.round.votes, [playerId]: choice }; const done = Object.keys(votes).length === state.players.length - 1; if (!done) { set({ ...state, deadlineAt: Date.now() + GAME_CONFIG.voteTimeMs, round: { ...state.round, votes } }); return } const result = countVotes(votes); const letter = result.winner === 'draw' ? 'A' : result.winner; set({ ...state, phase: 'REVEAL', deadlineAt: null, round: { ...state.round, votes, winner: state.round.answerOrder[letter] } }) },
+  beginRevenge() { set({ ...state, phase: 'REVENGE_ACTIVE', deadlineAt: Date.now() + CHALLENGE_CONFIG.rapidTap.durationMs }) },
   finishRound(humanGetsPoint: boolean, wentToRevenge: boolean) { if (!state.round) return; const winner: 'human' | 'ai' = humanGetsPoint ? 'human' : 'ai'; const score = { ...state.score, [winner]: state.score[winner] + 1 }; const challengerName = state.players.find((player) => player.id === state.round!.challengerId)?.name ?? ''; const history: RoundHistoryEntry[] = [...state.history, { roundNumber: state.roundNumber, challengerName, winner, wentToRevenge }]; set({ ...state, score, history, phase: getGameResult(score).finished ? 'GAME_RESULT' : 'ROUND_RESULT', deadlineAt: null }) },
   replay() { set({ ...initialState(), players: state.players }) },
   reset() { set(initialState()) },
