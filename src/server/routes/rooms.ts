@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import type { CreateRoomResponse, JoinRoomResponse } from "../../shared/types/api";
 import { validateCreateRoomRequest, validateGetRoomRequest, validateJoinRoomRequest } from "../../shared/validation/api";
 import { apiErrorStatus, fixedApiError } from "../lib/apiError";
 import { generateRoomCode } from "../lib/roomCode";
@@ -23,7 +24,12 @@ rooms.post("/", async (c) => {
     const result = await stub.createRoom(roomCode, playerName);
 
     if (result.ok) {
-      return c.json({ roomCode, playerId: result.playerId, playerToken: result.playerToken });
+      const response = {
+        roomCode,
+        playerId: result.playerId,
+        playerToken: result.playerToken,
+      } satisfies CreateRoomResponse;
+      return c.json(response);
     }
   }
 
@@ -49,7 +55,12 @@ rooms.post("/:roomCode/join", async (c) => {
     return c.json(fixedApiError(result.code), apiErrorStatus(result.code));
   }
 
-  return c.json({ playerId: result.playerId, playerToken: result.playerToken });
+  const response = {
+    roomCode: roomCodeValidation.value.roomCode,
+    playerId: result.playerId,
+    playerToken: result.playerToken,
+  } satisfies JoinRoomResponse;
+  return c.json(response);
 });
 
 rooms.get("/:roomCode", async (c) => {

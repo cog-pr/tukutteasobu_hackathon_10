@@ -42,6 +42,12 @@ export class ApiClientError extends Error {
   }
 }
 
+export function getApiErrorMessage(error: unknown): string {
+  return error instanceof ApiClientError
+    ? error.message
+    : ERROR_MESSAGES.UNKNOWN_ERROR
+}
+
 type ResponseValidator<T> = (value: unknown) => value is T
 
 const getApiBaseUrl = (): string => (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/$/, '')

@@ -2,6 +2,8 @@ import { runInDurableObject, SELF } from "cloudflare:test";
 import { env } from "cloudflare:workers";
 import { describe, expect, it } from "vitest";
 import { ROOM_CODE_CHARACTERS, ROOM_CODE_LENGTH } from "../../shared/constants";
+import type { CreateRoomResponse, JoinRoomResponse } from "../../shared/types/api";
+import { validateRoomCode } from "../../shared/validation/roomCode";
 import type { GamePhase } from "../../shared/types/game";
 import { ROOM_STORAGE_KEY, type PersistedRoom } from "../durable-objects/GameRoom";
 
@@ -13,7 +15,7 @@ async function createRoom(playerName: string) {
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ playerName }),
   });
-  return { res, body: (await res.json()) as { roomCode: string; playerId: string; playerToken: string } };
+  return { res, body: (await res.json()) as CreateRoomResponse };
 }
 
 async function joinRoom(roomCode: string, playerName: string) {
@@ -77,8 +79,15 @@ describe("POST /api/rooms/:roomCode/join", () => {
     const { res, body } = await joinRoom(created.roomCode, "サトウ");
 
     expect(res.status).toBe(200);
+    expect(body.roomCode).toBe(created.roomCode);
+    expect(validateRoomCode(body.roomCode).valid).toBe(true);
     expect(body.playerId).toMatch(/^player_/);
     expect(body.playerToken).toMatch(/^token_/);
+    expect(Object.keys(body).sort()).toEqual([
+      "playerId",
+      "playerToken",
+      "roomCode",
+    ] satisfies Array<keyof JoinRoomResponse>);
   });
 
   it("合計4人まで参加でき、5人目を拒否する", async () => {
